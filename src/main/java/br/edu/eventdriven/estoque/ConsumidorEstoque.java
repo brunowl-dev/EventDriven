@@ -14,9 +14,16 @@ public class ConsumidorEstoque {
 
     @RabbitListener(queues = ConfiguracaoRabbitMQ.FILA_ESTOQUE)
     public void processar(EventoPedidoCriado evento) {
-        log.info("Estoque: reservando {} unidade(s) do produto {} para o pedido {}",
-                evento.quantidade(), evento.idProduto(), evento.idPedido());
-
         // TODO didático: rejeitar reservas quando quantidade > 5.
+        if (evento.quantidade() <= 5)
+        {
+            log.info("Estoque: reservando {} unidade(s) do produto {} para o pedido {}",
+                evento.quantidade(), evento.idProduto(), evento.idPedido());
+        }
+        else 
+        {
+            log.info("Estoque GRANDE: reservando {} unidade(s) do produto {} para o pedido {}",
+                evento.quantidade(), evento.idProduto(), evento.idPedido());
+        }
     }
 }

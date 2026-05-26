@@ -26,6 +26,7 @@ public class ControladorPedido {
     @PostMapping
     public ResponseEntity<Map<String, String>> criarPedido(@RequestBody SolicitacaoPedido solicitacao) {
         String idPedido = UUID.randomUUID().toString();
+        //PedidoCriado instanciado
         EventoPedidoCriado evento = new EventoPedidoCriado(
                 idPedido,
                 solicitacao.idCliente(),
@@ -34,6 +35,7 @@ public class ControladorPedido {
                 Instant.now()
         );
 
+        //Evento sendo publicado no RabbitMQ
         templateRabbit.convertAndSend(ConfiguracaoRabbitMQ.EXCHANGE_PEDIDOS, "", evento);
 
         // TODO didático: publicar outros tipos de evento quando o fluxo crescer.

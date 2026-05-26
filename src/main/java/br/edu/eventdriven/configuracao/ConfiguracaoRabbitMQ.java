@@ -20,6 +20,7 @@ public class ConfiguracaoRabbitMQ {
     public static final String FILA_ESTOQUE = "estoque.queue";
     public static final String FILA_PAGAMENTO = "pagamento.queue";
     public static final String FILA_NOTIFICACAO = "notificacao.queue";
+    public static final String FILA_AUDITORIA = "auditoria.queue";
 
     @Bean
     FanoutExchange exchangePedidos() {
@@ -42,8 +43,18 @@ public class ConfiguracaoRabbitMQ {
     }
 
     @Bean
+    Queue filaAuditoria() {
+        return new Queue(FILA_AUDITORIA, true);
+    }
+
+    @Bean
     Binding vinculoEstoque(Queue filaEstoque, FanoutExchange exchangePedidos) {
         return BindingBuilder.bind(filaEstoque).to(exchangePedidos);
+    }
+
+    @Bean
+    Binding vinculoAuditoria(Queue filaAuditoria, FanoutExchange exchangePedidos) {
+        return BindingBuilder.bind(filaAuditoria).to(exchangePedidos);
     }
 
     @Bean
